@@ -1,0 +1,8 @@
+mcp-tool-center:
+  enabled: true
+
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true
