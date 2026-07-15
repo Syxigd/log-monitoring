@@ -10,12 +10,27 @@
     </parent>
     <artifactId>root-cause-engine</artifactId>
     <name>root-cause-engine</name>
-    <description>Root cause analysis using tree search</description>
+    <description>Root cause analysis using Easy Rules chain</description>
     <dependencies>
         <dependency>
             <groupId>com.ailog</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ailog</groupId>
+            <artifactId>context-builder</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-core</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
