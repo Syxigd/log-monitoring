@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ai-log-orchestrator
+
+  datasource:
+    url: jdbc:mysql://192.168.152.128:3306/alumni?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 200446sYx@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: 192.168.152.128
+      port: 6379
+      password: 200446sYx
+      database: 1
+
+rocketmq:
+  name-server: 192.168.152.128:9876
+
+rustfs:
+  endpoint: http://192.168.152.128:9001
+  access-key: DlaxEOb2GfLMRNqKe4Qg
+  secret-key: xcvSrXC0pVqyYzMRogjn1e2TKL7du6PBab4tisNO
+  bucket: alumni
