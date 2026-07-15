@@ -1,0 +1,6 @@
+observe-engine:
+  enabled: true
+
+observe:
+  collector:
+    interval-ms: 30000
