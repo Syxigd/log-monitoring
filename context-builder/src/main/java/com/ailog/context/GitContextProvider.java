@@ -27,8 +27,8 @@ public class GitContextProvider implements ContextProvider {
             Map<String, Object> data = new HashMap<>();
             String serviceName = event.getServiceName();
             if (serviceName != null && !serviceName.isBlank()) {
-                data.put("recentCommits", exec("git log --oneline -10 -- " + serviceName));
-                data.put("recentChanges", exec("git diff --name-only HEAD~5 HEAD"));
+                data.put(ContextData.GIT_COMMITS, exec("git log --oneline -10 -- " + serviceName));
+                data.put(ContextData.GIT_CHANGES, exec("git diff --name-only HEAD~5 HEAD"));
             }
             return ContextData.success(name(), data);
         } catch (Exception e) {

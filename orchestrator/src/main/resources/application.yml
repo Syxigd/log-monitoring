@@ -26,3 +26,21 @@ rustfs:
   access-key: DlaxEOb2GfLMRNqKe4Qg
   secret-key: xcvSrXC0pVqyYzMRogjn1e2TKL7du6PBab4tisNO
   bucket: alumni
+
+rootcause:
+  rules:
+    codeDefectRule:
+      enabled: true
+      priority: 1
+    resourceExhaustionRule:
+      enabled: true
+      priority: 2
+    configErrorRule:
+      enabled: true
+      priority: 3
+    dbPerformanceRule:
+      enabled: true
+      priority: 4
+    dependencyFailureRule:
+      enabled: true
+      priority: 5

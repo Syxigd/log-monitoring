@@ -24,9 +24,9 @@ public class DbPerformanceRule implements RootCauseAnalyzer {
     public boolean evaluate(ContextPackage context) {
         if (context.getOriginalEvent().getType() != EventType.DB_SLOW_QUERY) return false;
 
-        ContextData dbData = context.getContexts().get("db");
+        ContextData dbData = context.getContexts().get(ContextData.PROVIDER_DB);
         return dbData != null && dbData.isSuccess()
-                && dbData.getData().containsKey("slowSql");
+                && dbData.get(ContextData.DB_SLOW_SQL, String.class) != null;
     }
 
     @Override
@@ -35,12 +35,12 @@ public class DbPerformanceRule implements RootCauseAnalyzer {
         com.ailog.common.event.Event event = context.getOriginalEvent();
         evidence.add("检测到数据库慢查询");
 
-        ContextData dbData = context.getContexts().get("db");
+        ContextData dbData = context.getContexts().get(ContextData.PROVIDER_DB);
         if (dbData != null && dbData.isSuccess()) {
-            String slowSql = (String) dbData.getData().get("slowSql");
+            String slowSql = dbData.get(ContextData.DB_SLOW_SQL, String.class);
             if (slowSql != null) evidence.add("慢查询详情：" + slowSql);
 
-            String locks = (String) dbData.getData().get("locks");
+            String locks = dbData.get(ContextData.DB_LOCKS, String.class);
             if (locks != null && !locks.isBlank()) evidence.add("当前锁信息：" + locks);
         }
 

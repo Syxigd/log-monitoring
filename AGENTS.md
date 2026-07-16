@@ -35,7 +35,7 @@ cd ai-log-monitoring-ui && pnpm dev && pnpm build
 | observe-engine | 完成 — 5 Collector(Log/Docker/MySQL/Redis/MQ) + ObserveEngineService + ObserveScheduler，30s 轮询发布至 EventBus | com.ailog.observe |
 | context-builder | 完成 — ContextProvider 接口 + 7 Provider(Docker/DB/Redis/MQ/Git/Code/Env) + ContextBuilderService + ContextPackage | com.ailog.context |
 | code-knowledge-graph | 空骨架 | com.ailog.knowledge |
-| root-cause-engine | 空骨架 | com.ailog.rootcause |
+| root-cause-engine | 完成 — RootCause 枚举 + RootCauseReport 模型 + RootCauseAnalyzer 接口 + 5 个 Easy Rule(CodeDefect/ResourceExhaustion/ConfigError/DbPerformance/DependencyFailure) + RootCauseEngineService 两层编排 | com.ailog.rootcause |
 | planner | 空骨架 | com.ailog.planner |
 | executor | 空骨架 | com.ailog.executor |
 | validation-engine | 空骨架 | com.ailog.validation |
@@ -62,6 +62,7 @@ cd ai-log-monitoring-ui && pnpm dev && pnpm build
 `ai-log-monitoring-ui/` — React 19 + Vite + TypeScript + Tailwind 4 + shadcn
 包管理：pnpm
 可视化库：React Flow, Monaco Editor, Cytoscape.js, Mermaid, ECharts
+状态：骨架完成，页面待开发（仪表盘、事件中心、根因分析、配置）
 
 ## 未完成目标
 
@@ -76,3 +77,10 @@ cd ai-log-monitoring-ui && pnpm dev && pnpm build
 - ContextPackage 输出后无消费方，需对接 root-cause-engine
 - CodeContextProvider 基于简单类名正则匹配，未实现真实堆栈解析（解析全限定类名 → 文件路径）
 - 缺少 Trace 链路数据（明确非本期范围，后续配合 OpenTelemetry）
+
+### root-cause-engine
+- 规则目前是硬编码关键词匹配，可扩展性有限
+- 未接入实际 EventBus 事件流（目前为显式调用的 analyze()）
+- 缺少多事件关联分析（目前单 Event → 单 Report）
+- 证据链提取依赖 ContextPackage 的 data Map 中的 String 值，类型不安全
+- 缺少 LLM 辅助分析（非本期范围）

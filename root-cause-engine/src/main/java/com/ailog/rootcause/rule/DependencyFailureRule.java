@@ -24,9 +24,9 @@ public class DependencyFailureRule implements RootCauseAnalyzer {
     public boolean evaluate(ContextPackage context) {
         if (context.getOriginalEvent().getType() != EventType.MQ_LAG) return false;
 
-        ContextData mqData = context.getContexts().get("mq");
+        ContextData mqData = context.getContexts().get(ContextData.PROVIDER_MQ);
         return mqData != null && mqData.isSuccess()
-                && mqData.getData().containsKey("lag");
+                && mqData.get(ContextData.MQ_LAG, String.class) != null;
     }
 
     @Override
@@ -35,12 +35,12 @@ public class DependencyFailureRule implements RootCauseAnalyzer {
         com.ailog.common.event.Event event = context.getOriginalEvent();
         evidence.add("消息队列消费延迟，可能导致依赖服务故障");
 
-        ContextData mqData = context.getContexts().get("mq");
+        ContextData mqData = context.getContexts().get(ContextData.PROVIDER_MQ);
         if (mqData != null && mqData.isSuccess()) {
-            String lag = (String) mqData.getData().get("lag");
+            String lag = mqData.get(ContextData.MQ_LAG, String.class);
             if (lag != null) evidence.add("消费延迟：" + lag);
 
-            String retry = (String) mqData.getData().get("retry");
+            String retry = mqData.get(ContextData.MQ_RETRY, String.class);
             if (retry != null && !retry.isBlank()) evidence.add("重试队列：" + retry);
         }
 

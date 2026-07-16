@@ -17,7 +17,7 @@ public class EnvContextProvider implements ContextProvider {
     @Override
     public ContextData collect(Event event) {
         Map<String, Object> data = new HashMap<>();
-        data.put("javaVersion", System.getProperty("java.version", "unknown"));
+        data.put(ContextData.ENV_JAVA_VERSION, System.getProperty("java.version", "unknown"));
         data.put("osName", System.getProperty("os.name", "unknown"));
         data.put("osArch", System.getProperty("os.arch", "unknown"));
         data.put("availableProcessors", Runtime.getRuntime().availableProcessors());

@@ -6,6 +6,8 @@ public interface EventBus {
 
     void subscribe(EventType type, EventHandler handler);
 
+    void subscribeAll(EventHandler handler);
+
     @FunctionalInterface
     interface EventHandler {
         void handle(Event event);

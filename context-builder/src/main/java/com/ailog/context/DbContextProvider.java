@@ -25,8 +25,8 @@ public class DbContextProvider implements ContextProvider {
     public ContextData collect(Event event) {
         try {
             Map<String, Object> data = new HashMap<>();
-            data.put("slowSql", mysqlTool.slowSql());
-            data.put("locks", mysqlTool.locks());
+            data.put(ContextData.DB_SLOW_SQL, mysqlTool.slowSql());
+            data.put(ContextData.DB_LOCKS, mysqlTool.locks());
             return ContextData.success(name(), data);
         } catch (Exception e) {
             return ContextData.failure(name(), e.getMessage());

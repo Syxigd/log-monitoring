@@ -22,17 +22,17 @@ public class ResourceExhaustionRule implements RootCauseAnalyzer {
 
     @Override
     public boolean evaluate(ContextPackage context) {
-        ContextData dockerData = context.getContexts().get("docker");
+        ContextData dockerData = context.getContexts().get(ContextData.PROVIDER_DOCKER);
         if (dockerData != null && dockerData.isSuccess()) {
-            String logs = (String) dockerData.getData().get("logs");
+            String logs = dockerData.get(ContextData.DOCKER_LOGS, String.class);
             if (logs != null && (logs.contains("OOM") || logs.contains("oom") || logs.contains("kill"))) {
                 return true;
             }
         }
 
-        ContextData redisData = context.getContexts().get("redis");
+        ContextData redisData = context.getContexts().get(ContextData.PROVIDER_REDIS);
         if (redisData != null && redisData.isSuccess()) {
-            String memory = (String) redisData.getData().get("memory");
+            String memory = redisData.get(ContextData.REDIS_MEMORY, String.class);
             if (memory != null && memory.contains("used_memory_rss")) {
                 return true;
             }
@@ -47,17 +47,17 @@ public class ResourceExhaustionRule implements RootCauseAnalyzer {
         Event event = context.getOriginalEvent();
         evidence.add("服务 " + event.getServiceName() + " 触发 " + event.getExceptionType() + " 告警");
 
-        ContextData dockerData = context.getContexts().get("docker");
+        ContextData dockerData = context.getContexts().get(ContextData.PROVIDER_DOCKER);
         if (dockerData != null && dockerData.isSuccess()) {
-            String logs = (String) dockerData.getData().get("logs");
+            String logs = dockerData.get(ContextData.DOCKER_LOGS, String.class);
             if (logs != null && logs.contains("OOM")) {
                 evidence.add("Docker 容器因 OOM 被杀死");
             }
         }
 
-        ContextData redisData = context.getContexts().get("redis");
+        ContextData redisData = context.getContexts().get(ContextData.PROVIDER_REDIS);
         if (redisData != null && redisData.isSuccess()) {
-            String memory = (String) redisData.getData().get("memory");
+            String memory = redisData.get(ContextData.REDIS_MEMORY, String.class);
             if (memory != null) {
                 evidence.add("Redis 内存告警：" + memory);
             }

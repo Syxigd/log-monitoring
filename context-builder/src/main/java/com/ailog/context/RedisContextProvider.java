@@ -25,8 +25,8 @@ public class RedisContextProvider implements ContextProvider {
     public ContextData collect(Event event) {
         try {
             Map<String, Object> data = new HashMap<>();
-            data.put("memory", redisTool.memory());
-            data.put("clusterInfo", redisTool.clusterInfo());
+            data.put(ContextData.REDIS_MEMORY, redisTool.memory());
+            data.put(ContextData.REDIS_CLUSTER, redisTool.clusterInfo());
             return ContextData.success(name(), data);
         } catch (Exception e) {
             return ContextData.failure(name(), e.getMessage());

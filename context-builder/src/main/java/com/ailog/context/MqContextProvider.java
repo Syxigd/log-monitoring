@@ -25,8 +25,8 @@ public class MqContextProvider implements ContextProvider {
     public ContextData collect(Event event) {
         try {
             Map<String, Object> data = new HashMap<>();
-            data.put("lag", mqTool.lag("DEFAULT_CONSUMER"));
-            data.put("retry", mqTool.retry("DEFAULT_CONSUMER"));
+            data.put(ContextData.MQ_LAG, mqTool.lag("DEFAULT_CONSUMER"));
+            data.put(ContextData.MQ_RETRY, mqTool.retry("DEFAULT_CONSUMER"));
             return ContextData.success(name(), data);
         } catch (Exception e) {
             return ContextData.failure(name(), e.getMessage());

@@ -23,10 +23,10 @@ public class CodeDefectRule implements RootCauseAnalyzer {
     @Override
     public boolean evaluate(ContextPackage context) {
         String exceptionType = context.getOriginalEvent().getExceptionType();
-        ContextData gitData = context.getContexts().get("git");
+        ContextData gitData = context.getContexts().get(ContextData.PROVIDER_GIT);
         return exceptionType != null && !exceptionType.isBlank()
                 && gitData != null && gitData.isSuccess()
-                && gitData.getData().containsKey("recentCommits");
+                && gitData.get(ContextData.GIT_COMMITS, String.class) != null;
     }
 
     @Override
@@ -36,9 +36,9 @@ public class CodeDefectRule implements RootCauseAnalyzer {
         evidence.add(event.getServiceName() + " 出现 " + event.getExceptionType()
                 + "：" + (event.getErrorMessage() != null ? event.getErrorMessage() : ""));
 
-        ContextData gitData = context.getContexts().get("git");
+        ContextData gitData = context.getContexts().get(ContextData.PROVIDER_GIT);
         if (gitData != null && gitData.isSuccess()) {
-            String commits = (String) gitData.getData().get("recentCommits");
+            String commits = gitData.get(ContextData.GIT_COMMITS, String.class);
             if (commits != null && !commits.isBlank()) {
                 evidence.add("Git 记录显示近期提交：" + commits);
             }

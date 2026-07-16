@@ -25,12 +25,12 @@ public class DockerContextProvider implements ContextProvider {
     public ContextData collect(Event event) {
         try {
             Map<String, Object> data = new HashMap<>();
-            data.put("ps", dockerTool.ps());
+            data.put(ContextData.DOCKER_PS, dockerTool.ps());
 
             String containerId = event.getPayload() != null
                     ? (String) event.getPayload().get("containerId") : null;
             if (containerId != null) {
-                data.put("logs", dockerTool.logs(containerId, 50));
+                data.put(ContextData.DOCKER_LOGS, dockerTool.logs(containerId, 50));
             }
 
             return ContextData.success(name(), data);
