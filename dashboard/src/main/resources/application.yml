@@ -1,2 +1,3 @@
 dashboard:
   enabled: true
+  allowed-origins: ${AILOG_DASHBOARD_ALLOWED_ORIGINS:http://localhost:5173}

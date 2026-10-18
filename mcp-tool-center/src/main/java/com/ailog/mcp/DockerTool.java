@@ -1,5 +1,6 @@
 package com.ailog.mcp;
 
+import com.ailog.mcp.security.McpOperationPolicy;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Frame;
@@ -11,14 +12,17 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class DockerTool {
 
     private final DockerClient dockerClient;
+    private final McpOperationPolicy operationPolicy;
 
-    public DockerTool() {
+    public DockerTool(McpOperationPolicy operationPolicy) {
+        this.operationPolicy = operationPolicy;
         var config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
         var httpClient = new ApacheDockerHttpClient.Builder()
                 .dockerHost(config.getDockerHost())
@@ -63,6 +67,10 @@ public class DockerTool {
 
     @Tool(description = "Restart a Docker container")
     public String restart(String containerId) {
+        String requestId = UUID.randomUUID().toString();
+        if (!operationPolicy.isAllowed("docker.restart", "mcp-tool", requestId)) {
+            return "Denied: docker.restart is disabled by MCP security policy (requestId=" + requestId + ")";
+        }
         dockerClient.restartContainerCmd(containerId).exec();
         return "Container " + containerId.substring(0, 12) + " restarted";
     }

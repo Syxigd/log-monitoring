@@ -55,7 +55,7 @@ cd ai-log-monitoring-ui && pnpm dev && pnpm build
 
 全部运行在 `192.168.152.128`：
 - MySQL 3306 / Redis 6379 / RocketMQ 9876 / RustFS(S3) 9001
-- 凭据见 `orchestrator/application.yml`
+- 连接参数通过 `AILOG_` 环境变量注入，真实凭据不得写入仓库；轮换状态见 `docs/运维/第一阶段凭据轮换清单.md`
 
 ## 前端
 

@@ -1,5 +1,6 @@
 package com.ailog.mcp;
 
+import com.ailog.mcp.security.SqlReadOnlyGuard;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,17 @@ import java.util.stream.Collectors;
 public class MysqlTool {
 
     private final JdbcTemplate jdbcTemplate;
+    private final SqlReadOnlyGuard sqlReadOnlyGuard;
 
-    public MysqlTool(JdbcTemplate jdbcTemplate) {
+    public MysqlTool(JdbcTemplate jdbcTemplate, SqlReadOnlyGuard sqlReadOnlyGuard) {
         this.jdbcTemplate = jdbcTemplate;
+        this.sqlReadOnlyGuard = sqlReadOnlyGuard;
     }
 
     @Tool(description = "Execute a SELECT query and return results")
     public String query(String sql) {
         try {
+            sqlReadOnlyGuard.assertReadOnly(sql);
             List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
             if (rows.isEmpty()) return "0 rows returned";
             return rows.stream()
@@ -41,7 +45,10 @@ public class MysqlTool {
 
     @Tool(description = "Show indexes for a table")
     public String indexes(String table) {
-        List<Map<String, Object>> indexes = jdbcTemplate.queryForList("SHOW INDEX FROM " + table);
+        if (table == null || !table.matches("[A-Za-z0-9_$]+")) {
+            return "Error: invalid table identifier";
+        }
+        List<Map<String, Object>> indexes = jdbcTemplate.queryForList("SHOW INDEX FROM `" + table + "`");
         return indexes.stream()
                 .map(m -> String.format("%s (%s) %s",
                         m.get("Key_name"), m.get("Column_name"), m.get("Non_unique")))

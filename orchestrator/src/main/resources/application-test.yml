@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+logging:
+  level:
+    com.ailog: INFO

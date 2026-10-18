@@ -39,7 +39,7 @@
 |------|-----|
 | 外部服务地址 | 192.168.152.128 |
 | MySQL | 3306, database: alumni |
-| Redis | 6379, password: 200446sYx, db: 1 |
+| Redis | 6379, authentication configured through `AILOG_REDIS_PASSWORD`, db: 1 |
 | RocketMQ | 9876 |
 | RustFS (S3) | 9001, bucket: alumni |
 
@@ -578,7 +578,7 @@ Easy Rules 的 POJO 规则模式：
 ```
 1. Docker: 需要 Docker daemon 运行中
 2. MySQL: 3306 端口可访问，已创建 alumni 数据库
-3. Redis: 6379 端口可访问，已配置密码 200446sYx
+3. Redis: 6379 端口可访问，凭据由 `AILOG_REDIS_PASSWORD` 注入
 4. RocketMQ: 9876 端口可访问（nameserver）
 5. RustFS (MinIO 兼容): 9001 端口可访问，已创建 alumni bucket
 ```

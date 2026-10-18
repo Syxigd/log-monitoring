@@ -47,9 +47,16 @@ ai-log-monitoring-ui/.vite/
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
+!**/.env.example
 *.pem
 *.key
 *.crt
+
+# --- Security reports ---
+security-scan-*
+**/security-scan-*
 
 # --- Logs ---
 logs/
